@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link rel="stylesheet" href="/weather.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="city" placeholder="Enter a city name">
+        <button onclick="getWeather()">Get Weather</button>
+
+        <div class="weather-info" id="weather">
+
+
+
+        </div>
+    </div>
+
+
+
+    <script>
+   async function getWeather() {
+            let apiKey = "5642fcc283108176680d339c57073595";
+            let city = document.getElementById('city').value;
+            if (!city) return alert("Please enter a city name");
+
+            let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+            try {
+
+                let response = await fetch(url);
+                let data = await response.json();
+
+                console.log(data);
+
+                if (data.cod === 200) {
+                    document.getElementById('weather').innerHTML = `
+                    <h2> Country Name: ${data.name} (${data.sys.country}) </h2>
+                    <p> Temperature: ${data.main.temp} &deg;K </p>
+                    <p> Weather: ${data.weather[0].description} </p>
+                    <p> Humidity: ${data.main.humidity}% </p>
+
+                    `;
+                } else {
+                    document.getElementById('weather').innerHTML = `
+
+                   <p>${data.message}</p>
+
+                   `;
+                }
+
+            } catch (error) {
+                console.log(error);
+                document.getElementById('weather').innerHTML = `
+                  <p>Failed to read data</p>
+                `;
+
+            }
+
+        }
+
+
+
+    </script>
+
+</body>
+</html>
